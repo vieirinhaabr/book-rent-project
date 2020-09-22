@@ -1,0 +1,45 @@
+﻿@model Booker.ViewModels.CustomerFormViewModel
+
+@{
+    ViewBag.Title = "Customer Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model.Customer.Id > 0)
+{
+    <h2>@Model.Customer.Name</h2>
+}
+else
+{
+    <h2>New Customer</h2>
+}
+
+@using (Html.BeginForm("Save", "Customers"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.Customer.Name)
+        @Html.TextBoxFor(m => m.Customer.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Customer.Name)
+    </div>
+
+    @Html.HiddenFor(m => m.Customer.Id)
+    @Html.AntiForgeryToken()
+    <button type="submit" formmethod="post" class="btn btn-primary">Save</button>
+}
+
+
+@if (Model.Customer.Id > 0)
+{
+    <br />
+
+    using (Html.BeginForm("Delete/" + Model.Customer.Id, "Customers"))
+    {
+        @Html.HiddenFor(m => m.Customer.Id)
+        <button type="submit" formmethod="post" class="btn btn-danger">Delete</button>
+    }
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
